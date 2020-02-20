@@ -10,6 +10,7 @@ app.use(express.json({ extended: false }));
 
 // Routes
 app.use('/api/task', require('./routes/api/task'));
+app.use('/api/auth', require('./routes/api/auth'));
 
 // Unknown Endpoint
 app.get('*', (req, res) => {

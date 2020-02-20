@@ -1,6 +1,8 @@
 const express = require('express');
 const Task = require('../../models/Task');
+const auth = require('../../middleware/auth');
 const router = express.Router();
+
 
 router.post('/', async (req, res) => {
   try {
@@ -13,6 +15,16 @@ router.post('/', async (req, res) => {
 
     const task = await newTask.save();
     return res.json(task);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+});
+
+router.get('/', async (req, res) => {
+  try {
+    const tasks = await Task.find({ });
+    return res.json(tasks.map((task) => task.toJSON()));
   } catch (error) {
     console.error(error.message);
     return res.status(500).send('Server Error');
