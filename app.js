@@ -1,8 +1,9 @@
 const express = require('express');
-
+const connectDB = require('./db');
 const app = express();
 
 // Connect to database
+connectDB();
 
 // Body Parser
 app.use(express.json({ extended: false }));
