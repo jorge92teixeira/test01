@@ -3,8 +3,24 @@ const Task = require('../../models/Task');
 const auth = require('../../middleware/auth');
 const router = express.Router();
 
+// @route   GET /api/task
+// @desc    Get all tasks
+// @access  Public
+router.get('/', async (req, res) => {
+  try {
+    const tasks = await Task.find({ });
+    return res.json(tasks.map((task) => task.toJSON()));
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+});
 
-router.post('/', async (req, res) => {
+
+// @route   POST /api/task/
+// @desc    Create new Task
+// @access  Private
+router.post('/', auth,  async (req, res) => {
   try {
     const newTask = new Task({
       name: req.body.name,
@@ -21,17 +37,10 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
-  try {
-    const tasks = await Task.find({ });
-    return res.json(tasks.map((task) => task.toJSON()));
-  } catch (error) {
-    console.error(error.message);
-    return res.status(500).send('Server Error');
-  }
-});
-
-router.get('/:id', async (req, res) => {
+// @route   GET /api/task/:id
+// @desc    Get task by ID
+// @access  Private
+router.get('/:id', auth, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) {
@@ -44,7 +53,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+// @route   PUT /api/task/:id
+// @desc    Update task by ID
+// @access  Private
+router.put('/:id', auth, async (req, res) => {
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
     return res.json(task);
@@ -54,7 +66,10 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+// @route   DELETE /api/task/:id
+// @desc    Delete task by ID
+// @access  Private
+router.delete('/:id', auth, async (req, res) => {
   try {
     await Task.findByIdAndDelete(req.params.id);
     return res.json({ msg: 'Task deleted ' });
