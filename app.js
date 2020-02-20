@@ -9,10 +9,7 @@ connectDB();
 app.use(express.json({ extended: false }));
 
 // Routes
-app.use('/', (req, res) => {
-  res.send('hello');
-});
-
+app.use('/api/task', require('./routes/api/task'));
 
 // Unknown Endpoint
 app.get('*', (req, res) => {
